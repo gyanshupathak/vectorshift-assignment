@@ -7,7 +7,8 @@ import os
 app = FastAPI()
 
 # Get allowed origins from environment variable, default to localhost for development
-allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+allowed_origins_str = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000")
+allowed_origins = [origin.strip() for origin in allowed_origins_str.split(",") if origin.strip()]
 
 app.add_middleware(
     CORSMiddleware,
@@ -59,6 +60,14 @@ def is_dag(nodes: List[Node], edges: List[Edge]) -> bool:
 @app.get('/')
 def read_root():
     return {'Ping': 'Pong'}
+
+@app.get('/api')
+def api_root():
+    return {'message': 'API is running'}
+
+@app.get('/health')
+def health_check():
+    return {'status': 'healthy'}
 
 @app.post("/pipelines/parse")
 def parse_pipeline(pipeline: Pipeline):
