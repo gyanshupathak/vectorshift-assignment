@@ -14,6 +14,7 @@ app = FastAPI()
 @app.on_event("startup")
 async def startup_event():
     logger.info("Application starting up...")
+    logger.info(f"PORT env var: {os.getenv('PORT', 'Not set')}")
     logger.info(f"ALLOWED_ORIGINS: {os.getenv('ALLOWED_ORIGINS', 'Not set')}")
 
 # Get allowed origins from environment variable, default to localhost for development
